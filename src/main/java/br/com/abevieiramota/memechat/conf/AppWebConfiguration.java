@@ -8,7 +8,8 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,9 +19,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import br.com.abevieiramota.memechat.classifier.MemeClassifier;
 import br.com.abevieiramota.memechat.controller.MemeController;
+import br.com.abevieiramota.memechat.dao.MemeDao;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { MemeController.class, MemeClassifier.class })
+@ComponentScan(basePackageClasses = { MemeController.class, MemeClassifier.class, MemeDao.class })
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean
@@ -65,9 +67,10 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
-
+	
 	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
+	public LobHandler lobHandler() {
+		return new DefaultLobHandler();
 	}
+
 }

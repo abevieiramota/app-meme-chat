@@ -1,6 +1,7 @@
 package br.com.abevieiramota.memechat.conf;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
@@ -17,6 +18,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class JpaConfiguration {
 
 	@Bean
+	public DriverManagerDataSource connection() throws SQLException {
+		URI dbUri = URI.create(System.getenv("DATABASE_URL"));
+
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setUsername(dbUri.getUserInfo().split(":")[0]);
+		dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
+		dataSource.setUrl("jdbc:postgresql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath());
+		dataSource.setDriverClassName("org.postgresql.Driver");
+
+		return dataSource;
+	}
+
+	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		URI dbUri = URI.create(System.getenv("DATABASE_URL"));
 
@@ -31,6 +45,7 @@ public class JpaConfiguration {
 		dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
 		dataSource.setUrl("jdbc:postgresql://" + dbUri.getHost() + ":" + dbUri.getPort() + dbUri.getPath());
 		dataSource.setDriverClassName("org.postgresql.Driver");
+
 		factoryBean.setDataSource(dataSource);
 
 		Properties props = new Properties();
