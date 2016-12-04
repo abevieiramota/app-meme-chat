@@ -18,10 +18,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import br.com.abevieiramota.memechat.classifier.MemeClassifier;
 import br.com.abevieiramota.memechat.controller.MemeController;
-import br.com.abevieiramota.memechat.dao.MemeDao;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { MemeController.class, MemeDao.class, MemeClassifier.class })
+@ComponentScan(basePackageClasses = { MemeController.class, MemeClassifier.class })
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean

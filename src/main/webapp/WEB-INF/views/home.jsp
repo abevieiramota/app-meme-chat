@@ -8,11 +8,11 @@
 <title>Memechat</title>
 </head>
 <body>
-	<form action="${s:mvcUrl('MC#generate').build()}" method="POST"
+	<form action="${s:mvcUrl('MC#memerate').build()}" method="GET"
 		enctype="multipart/form-data">
 		<div>
 			<label>Message</label>
-			<textarea name="content">
+			<textarea name="content" cols="40" rows="10">
 			</textarea>
 		</div>
 		<button type="submit">Generate</button>
