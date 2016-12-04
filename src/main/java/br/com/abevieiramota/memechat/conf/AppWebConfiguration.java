@@ -16,11 +16,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import br.com.abevieiramota.memechat.controller.HomeController;
-import br.com.abevieiramota.memechat.dao.MessageDao;
+import br.com.abevieiramota.memechat.classifier.MemeClassifier;
+import br.com.abevieiramota.memechat.controller.MemeController;
+import br.com.abevieiramota.memechat.dao.MemeDao;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, MessageDao.class })
+@ComponentScan(basePackageClasses = { MemeController.class, MemeDao.class, MemeClassifier.class })
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean
