@@ -8,7 +8,7 @@
 <title>Memechat</title>
 </head>
 <body>
-	<form action="${s:mvcUrl('MC#memerate').build()}" method="GET"
+	<form action="${s:mvcUrl('MC#memerate').arg(1, 1).build()}" method="GET"
 		enctype="multipart/form-data">
 		<div>
 			<label>Message</label>
