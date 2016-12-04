@@ -7,12 +7,12 @@ import javax.persistence.Id;
 public class Meme {
 	
 	@Id
-	private long id;
+	private Long id;
 
 	public void generateImg() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return this.id;
 	}
 }
