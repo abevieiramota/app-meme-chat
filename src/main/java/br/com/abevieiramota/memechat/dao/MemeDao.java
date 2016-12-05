@@ -18,6 +18,8 @@ import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import br.com.abevieiramota.memechat.model.Meme;
+
 @Repository
 // https://jdbc.postgresql.org/documentation/81/binary-data.html
 // TODO: refatorar
@@ -167,16 +169,18 @@ public class MemeDao {
 		}
 	}
 
-	public List<Long> allIds() {
+	public List<Meme> all() {
 		try (Connection conn = this.ds.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement("SELECT id FROM meme");
+				PreparedStatement pstmt = conn.prepareStatement("SELECT id, filename FROM meme");
 				ResultSet rs = pstmt.executeQuery()) {
-			List<Long> ids = new ArrayList<Long>();
-			while(rs.next()) {
-				ids.add(rs.getLong("id"));
+			List<Meme> memes = new ArrayList<Meme>();
+			while (rs.next()) {
+				long id = rs.getLong("id");
+				String filename = rs.getString("filename");
+				memes.add(new Meme(id, filename));
 			}
-			
-			return ids;
+
+			return memes;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

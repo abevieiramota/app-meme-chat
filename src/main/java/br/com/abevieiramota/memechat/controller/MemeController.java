@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +34,7 @@ public class MemeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView form() {
 		ModelAndView modelAndView = new ModelAndView("home");
-		modelAndView.addObject("ids", this.memeDao.allIds());
+		modelAndView.addObject("memes", this.memeDao.all());
 		
 		return modelAndView;
 	}

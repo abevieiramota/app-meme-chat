@@ -19,8 +19,8 @@
 		<div>
 			<label>Meme</label>
 			<select name="id">
-				<c:forEach items="${ids}" var="id">
-					<option value="${id}">${id}</option>
+				<c:forEach items="${memes}" var="meme">
+					<option value="${meme.id}">${meme.filename}</option>
 				</c:forEach>
 			</select>
 		</div>
