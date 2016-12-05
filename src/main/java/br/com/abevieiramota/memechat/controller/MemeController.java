@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,30 +16,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.abevieiramota.memechat.dao.MemeDao;
 
 @Controller
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
+@RequestMapping("/meme")
 public class MemeController {
 
 	@Autowired
 	private MemeDao memeDao;
 
-	@Autowired
-	private ServletContext ctx;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView form() {
-
-		return new ModelAndView("home");
+		ModelAndView modelAndView = new ModelAndView("home");
+		modelAndView.addObject("ids", this.memeDao.allIds());
+		
+		return modelAndView;
 	}
 
 	// TODO: content can be null?
-	@RequestMapping(value = "/meme/{id}/render", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-	public void memerate(HttpServletResponse response, @PathVariable("id") long id, String content)
+	// TODO: imagem sendo salva com filename "render"
+	@RequestMapping(value = "/render", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+	public void memerate(HttpServletResponse response, long id, String content)
 			throws IOException, SQLException {
 
 		InputStream imgAsStream = this.memeDao.find(id);
@@ -54,11 +57,19 @@ public class MemeController {
 		ImageIO.write(image, "jpg", response.getOutputStream());
 	}
 
-	@RequestMapping("/cadastra")
-	public void cadastra() throws IOException {
-		try (InputStream imgAsStream = this.ctx.getResourceAsStream("/images/lememe.jpg")) {
-			this.memeDao.add(imgAsStream, 1l);
-		}
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	public ModelAndView cadastra() throws IOException {
+		return new ModelAndView("form");
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String create(@RequestParam("image") MultipartFile image, RedirectAttributes redirectAttributes)
+			throws IOException {
+
+		long memeId = this.memeDao.add(image.getInputStream());
+		redirectAttributes.addFlashAttribute("message", "Meme id:" + memeId);
+
+		return "redirect:/meme/form";
 	}
 
 }
