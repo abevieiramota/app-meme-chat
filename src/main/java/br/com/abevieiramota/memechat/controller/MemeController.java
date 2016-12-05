@@ -66,7 +66,7 @@ public class MemeController {
 	public String create(@RequestParam("image") MultipartFile image, RedirectAttributes redirectAttributes)
 			throws IOException {
 
-		long memeId = this.memeDao.add(image.getInputStream());
+		long memeId = this.memeDao.add(image.getInputStream(), image.getOriginalFilename());
 		redirectAttributes.addFlashAttribute("message", "Meme id:" + memeId);
 
 		return "redirect:/meme/form";

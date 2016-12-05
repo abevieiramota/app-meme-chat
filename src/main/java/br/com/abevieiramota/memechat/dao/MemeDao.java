@@ -111,7 +111,7 @@ public class MemeDao {
 
 	}
 
-	public long add(InputStream imgAsStream) {
+	public long add(InputStream imgAsStream, String filename) {
 
 		try (Connection conn = this.ds.getConnection()) {
 			try {
@@ -134,9 +134,10 @@ public class MemeDao {
 					obj.write(buf, 0, s);
 				}
 
-				try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO meme (bytes) VALUES (?)",
+				try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO meme (bytes, filename) VALUES (?, ?)",
 						Statement.RETURN_GENERATED_KEYS)) {
 					pstmt.setLong(1, oid);
+					pstmt.setString(2, filename);
 					pstmt.executeUpdate();
 					long memeId;
 					try (ResultSet generatedId = pstmt.getGeneratedKeys()) {
